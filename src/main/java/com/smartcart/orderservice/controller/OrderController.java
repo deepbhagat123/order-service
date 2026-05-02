@@ -20,10 +20,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderEntity> placeOrder(
-            @RequestParam Long productId,
-            @RequestParam int quantity) {
-        OrderEntity order = orderService.placeOrder(productId, quantity);
-        return ResponseEntity.status(201).body(order);
+    public ResponseEntity<?> placeOrder(@RequestParam Long productId,
+                                        @RequestParam int quantity) {
+        try {
+            OrderEntity order = orderService.placeOrder(productId, quantity);
+            return ResponseEntity.status(201).body(order);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
